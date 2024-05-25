@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             if(heartRate==-1 || spo2==-1 || temperature ==-1 ){
-                btReadings.setText("Please wait for sensor to stabilize");
+                btReadings.setText("Please wait for sensor to stabilize !!");
             }else{
                 editTextHeartRate.setText("Heart Rate :  " +heartRate +"  bpm" );
                 editTextSpo2.setText("SpO2 :  " +spo2 + "  %");
