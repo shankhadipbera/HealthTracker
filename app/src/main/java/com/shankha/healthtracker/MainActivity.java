@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                    if (heartRate >= 30 && heartRate <=250 && spo2<=101 && spo2 >=50 && temperature<43.00 && temperature>25.00) {
+                    if (heartRate >= 30 && heartRate <=250 && spo2<101 && spo2 >=50 && temperature<43.00 && temperature>25.00) {
 
                         Intent intent2 = new Intent(MainActivity.this, AnalysisActivity.class);
                         intent2.putExtra("Name",name);
@@ -212,6 +212,10 @@ public class MainActivity extends AppCompatActivity {
             heartRate = Integer.parseInt(parts[0]);
             spo2 = Integer.parseInt(parts[1]);
             temperature = Float.parseFloat(parts[2]);
+            temperature= temperature+5;
+
+
+
 
 
             if(heartRate==-1 || spo2==-1 || temperature ==-1 ){
