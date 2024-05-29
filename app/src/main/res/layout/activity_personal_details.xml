@@ -3,74 +3,191 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    android:background="@drawable/ui_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".PersonalDetailsActivity">
 
-    <EditText
-        android:id="@+id/editTextName"
+
+    <Button
+        android:id="@+id/btnSignIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="124dp"
-        android:ems="10"
-        android:textSize="24sp"
+        android:layout_marginBottom="28dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="SignIn"
         android:textStyle="bold"
-        android:inputType="text"
-        android:hint="Enter Your Name"
-        android:textColor="@color/black"
-        android:textColorHint="@color/black"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.527"
+        app:layout_constraintHorizontal_bias="0.176"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnSignUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="48dp"
+        android:text="SignUp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/btnSignIn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnSignIn"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textLMobile"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/textLEmail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textLWeight">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/mobileNo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Your Mobile No"
+            android:inputType="phone"
+            android:textCursorDrawable="@null" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textLName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/textLAge"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textSignIn">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Your Name"
+            android:inputType="text"
+            android:textCursorDrawable="@null" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textLAge"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/textLWeight"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textLName">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/age"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Your Age"
+            android:inputType="number"
+            android:textCursorDrawable="@null" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textLWeight"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/textLMobile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textLAge">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/weight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Your Weight (Kg.)"
+            android:inputType="number"
+            android:textCursorDrawable="@null" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textLEmail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/textLPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textLMobile">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/emailId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Your Email Id"
+            android:inputType="textEmailAddress"
+            android:textCursorDrawable="@null" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textLPassword"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/btnSignIn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textLEmail">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Your Password"
+            android:inputType="numberPassword"
+            android:textCursorDrawable="@null" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textSignIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:text="Click For SignIn"
+        android:textSize="20sp"
+        android:textStyle="bold|italic"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/editTextAge"
+    <TextView
+        android:id="@+id/textSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="112dp"
-        android:ems="10"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:inputType="number"
-        android:textColor="@color/black"
-        android:textColorHint="@color/black"
-        android:hint="Enter Your Age"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="20dp"
+        android:text="Click For SignUp"
+        android:textSize="20sp"
+        android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextName" />
-
-    <EditText
-        android:id="@+id/editTextWeight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="88dp"
-        android:ems="10"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColorHint="@color/black"
-        android:textColor="@color/black"
-        android:inputType="number"
-        android:hint="Enter Your Weight in Kg"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.527"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextAge" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/buttonNext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="96dp"
-        android:text="Next"
-        android:background="@drawable/bt_bck"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

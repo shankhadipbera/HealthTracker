@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.shankha.healthtracker" />
+                  <option name="mobileSdkAppId" value="1:919490349076:android:1b0141c527cb114286ff01" />
+                  <option name="projectId" value="healthtracker-b2c0e" />
+                  <option name="projectNumber" value="919490349076" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

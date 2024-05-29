@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:viewBindingIgnore="true"
-    android:background="@drawable/ui_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
@@ -53,28 +52,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/connectToDevice" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <Button
         android:id="@+id/seachDevices"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="104dp"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/bt_bck"
+        android:layout_marginTop="36dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:text="Search linked BT devices"
         android:textColor="@color/white"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <Button
         android:id="@+id/connectToDevice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
-        android:background="@drawable/bt_bck"
         android:enabled="false"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
@@ -87,7 +84,7 @@
         app:layout_constraintTop_toBottomOf="@+id/btDevices"
         tools:ignore="MissingConstraints" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <Button
         android:id="@+id/refresh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -97,14 +94,13 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:textStyle="bold"
-        android:background="@drawable/bt_bck"
         app:layout_constraintBottom_toBottomOf="@+id/buttonAnalysis"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/buttonAnalysis"
         app:layout_constraintVertical_bias="0.0"
         tools:ignore="MissingConstraints" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <Button
         android:id="@+id/buttonAnalysis"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -112,7 +108,6 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:textStyle="bold"
-        android:background="@drawable/bt_bck"
         android:layout_marginStart="44dp"
         android:layout_marginBottom="16dp"
         android:text="Analysis"

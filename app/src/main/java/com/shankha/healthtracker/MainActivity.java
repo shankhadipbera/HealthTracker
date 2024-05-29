@@ -1,5 +1,6 @@
 package com.shankha.healthtracker;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -16,18 +17,26 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
-
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
     public static final int UPDATE_READING = 1;
@@ -49,12 +58,62 @@ public class MainActivity extends AppCompatActivity {
     private ConnectThread connectThread;
     private ConnectedThread connectedThread;
     private TextView btReadings;
+
+    private FirebaseAuth auth;
+    private FirebaseDatabase database=FirebaseDatabase.getInstance() ;
+    private UserModel userDetails;
+    private HealthData healthData;
+
+    private String name;
+    private int age, weight;
     UUID arduinoUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); //We declare a default UUID to create the global variable
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        auth= FirebaseAuth.getInstance();
+        DatabaseReference userRef= database.getReference("Users");
+
+        FirebaseUser user = auth.getCurrentUser();
+        if(user!=null){
+            String userId=auth.getCurrentUser().getUid();
+            userRef.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.exists()){
+                        userDetails =snapshot.getValue(UserModel.class);
+                        if (userDetails != null) {
+                            // Use userDetails object as needed
+                            Log.d("firebase", "UserName: " + userDetails.getUserName());
+                            Log.d("firebase", "Email: " + userDetails.getEmail());
+                            Log.d("firebase", "PhoneNo: " + userDetails.getPhoneNo());
+                            try {
+                                name = userDetails.getUserName();
+                                // Ensure userModel.getAge() is not null or empty before parsing
+                                String ageString = userDetails.getAge();
+                                age = (ageString != null && !ageString.isEmpty()) ? Integer.parseInt(ageString) : 0;
+                                // Ensure userModel.getWeight() is not null or empty before parsing
+                                String weightString = userDetails.getWeight();
+                                weight = (weightString != null && !weightString.isEmpty()) ? Integer.parseInt(weightString) : 0;
+                            } catch (NumberFormatException e) {
+                                Log.e("firebase", "Error parsing age or weight", e);
+                            }
+                        }else {
+                            Log.e("firebase", "UserModel is null");
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e("firebase", "Error getting data", error.toException());
+                }
+            });
+        }else {
+            Log.e("firebase", "User is not authenticated");
+        }
 
         BluetoothManager bluetoothManager = getSystemService(BluetoothManager.class);
         BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
@@ -64,13 +123,6 @@ public class MainActivity extends AppCompatActivity {
         Button connectToDevice = (Button) findViewById(R.id.connectToDevice);
         Button seachDevices = (Button) findViewById(R.id.seachDevices);
         Button clearValues = (Button) findViewById(R.id.refresh);
-
-        Intent intent = getIntent();
-        String name = intent.getStringExtra("Name");
-        int age = intent.getIntExtra("Age",0);
-        int weight = intent.getIntExtra("Weight",0);
-
-
 
         editTextTemp = findViewById(R.id.editTextTemperature);
         editTextHeartRate= findViewById(R.id.editTextHeartRate);
@@ -225,6 +277,7 @@ public class MainActivity extends AppCompatActivity {
                 editTextSpo2.setText("SpO2 :  " +spo2 + "  %");
                 editTextTemp.setText("Temperature : " +temperature);
                 btReadings.setText("");
+                saveHealthData(temperature,heartRate,spo2);
             }
 
         } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
@@ -233,6 +286,34 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void saveHealthData(float temperature, int heartRate, int spo2) {
+        healthData=new HealthData(temperature,heartRate,spo2);
+        DatabaseReference healthRef= database.getReference("HealthData");
+        healthRef.child(auth.getCurrentUser().getUid()).child(dateName()).setValue(healthData);
+    }
 
 
+    public static String dateName() {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
+            return simpleDateFormat.format(new Date());}
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menulist, menu);
+        return true;
+    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.logout) {
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(MainActivity.this,PersonalDetailsActivity.class));
+            return true;
+        } else if (id == R.id.editProfile) {
+            startActivity(new Intent(MainActivity.this,ProfileActivity.class));
+        }else{
+            startActivity(new Intent(MainActivity.this,OtherUserActivity.class));
+        }
+
+        // Handle other menu item clicks if needed
+        return super.onOptionsItemSelected(item);
+    }
 }
