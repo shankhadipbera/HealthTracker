@@ -6,5 +6,6 @@ data class UserModel(
     val password:String?=null,
     val phoneNo:String?=null,
     val age:String?=null,
-    val weight:String?=null
+    val weight:String?=null,
+    val userId:String?=null
 )

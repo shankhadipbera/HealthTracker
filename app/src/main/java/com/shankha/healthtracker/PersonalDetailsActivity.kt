@@ -133,8 +133,8 @@ class PersonalDetailsActivity : AppCompatActivity() {
         }
     }
     private fun saveUserData(email: String, password: String, mobileNo:String, name:String,age:String,weight:String) {
-        val user=UserModel(name,email,password,mobileNo,age,weight)
         val userId=FirebaseAuth.getInstance().currentUser!!.uid
+        val user=UserModel(name,email,password,mobileNo,age,weight,userId)
         database.child("Users").child(userId).setValue(user)
     }
 

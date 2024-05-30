@@ -1,5 +1,8 @@
 package com.shankha.healthtracker
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -29,6 +32,7 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(binding.root)
         auth= Firebase.auth
         database= Firebase.database.reference
+        binding.TILuid.isEnabled= false
         if(auth.currentUser!=null){
             val userId= auth.currentUser!!.uid
             loadUserData(userId)
@@ -51,6 +55,14 @@ class ProfileActivity : AppCompatActivity() {
             val weight = binding.eweight.text.toString().trim()
             updateUserData(name, mob, age, weight)
             disableClick()
+        }
+        binding.btnCpy.setOnClickListener {
+            val textToCopy = binding.uid.text.toString()
+            val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clipData = ClipData.newPlainText("label", textToCopy)
+            clipboardManager.setPrimaryClip(clipData)
+
+            Toast.makeText(this, "Text copied to clipboard", Toast.LENGTH_SHORT).show()
         }
 
 
@@ -98,6 +110,7 @@ class ProfileActivity : AppCompatActivity() {
                         binding.eage.setText(userModel.age.toString())
                         binding.eweight.setText(userModel.weight.toString())
                         binding.eMob.setText(userModel.phoneNo.toString())
+                        binding.uid.setText(userModel.userId.toString())
                     }else{
                         Toast.makeText(this@ProfileActivity,"Failed to Fetch Data", Toast.LENGTH_SHORT).show()
                     }

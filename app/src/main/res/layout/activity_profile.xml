@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -36,6 +35,7 @@
         android:layout_marginEnd="20dp"
         app:layout_constraintBottom_toTopOf="@+id/tLEweight"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tLEname">
 
@@ -55,6 +55,7 @@
         android:layout_marginEnd="20dp"
         app:layout_constraintBottom_toTopOf="@+id/tLEage"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tLEmob">
 
@@ -72,8 +73,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnSave"
+        app:layout_constraintBottom_toTopOf="@+id/TILuid"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tLEweight">
 
@@ -126,4 +128,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/back" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/TILuid"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnSave"
+        app:layout_constraintEnd_toStartOf="@+id/btnCpy"
+        app:layout_constraintStart_toStartOf="@+id/tLEage"
+        app:layout_constraintTop_toBottomOf="@+id/tLEage">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/uid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Your User Id."
+            android:text="" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btnCpy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="copy"
+        app:layout_constraintBottom_toBottomOf="@+id/TILuid"
+        app:layout_constraintEnd_toEndOf="@+id/tLEage"
+        app:layout_constraintTop_toTopOf="@+id/TILuid" />
 </androidx.constraintlayout.widget.ConstraintLayout>

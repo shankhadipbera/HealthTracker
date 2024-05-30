@@ -136,12 +136,7 @@ public class MainActivity extends AppCompatActivity {
                     if (heartRate >= 30 && heartRate <=250 && spo2<101 && spo2 >=50 && temperature<43.00 && temperature>25.00) {
 
                         Intent intent2 = new Intent(MainActivity.this, AnalysisActivity.class);
-                        intent2.putExtra("Name",name);
-                        intent2.putExtra("Age",age);
-                        intent2.putExtra("Weight",weight);
-                        intent2.putExtra("temp",temperature);
-                        intent2.putExtra("heartR",heartRate);
-                        intent2.putExtra("spO2",spo2);
+                        intent2.putExtra("userId",auth.getCurrentUser().getUid());
                         startActivity(intent2);
 
                     } else {
@@ -177,6 +172,9 @@ public class MainActivity extends AppCompatActivity {
                 editTextHeartRate.setText("Heart Rate : ");
                 editTextTemp.setText("Temperature :");
                 editTextSpo2.setText("SpO2 :  ");
+                editTextHeartRate.setVisibility(View.INVISIBLE);
+                editTextSpo2.setVisibility(View.INVISIBLE);
+                editTextTemp.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -276,6 +274,9 @@ public class MainActivity extends AppCompatActivity {
                 editTextHeartRate.setText("Heart Rate :  " +heartRate +"  bpm" );
                 editTextSpo2.setText("SpO2 :  " +spo2 + "  %");
                 editTextTemp.setText("Temperature : " +temperature);
+                editTextHeartRate.setVisibility(View.VISIBLE);
+                editTextSpo2.setVisibility(View.VISIBLE);
+                editTextTemp.setVisibility(View.VISIBLE);
                 btReadings.setText("");
                 saveHealthData(temperature,heartRate,spo2);
             }

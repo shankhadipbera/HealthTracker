@@ -1,7 +1,9 @@
 package com.shankha.healthtracker
 
+import android.content.Intent
 import android.database.Cursor
 import android.os.Bundle
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.ListView
@@ -11,7 +13,14 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.shankha.healthtracker.databinding.ActivityOtherUserBinding
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class OtherUserActivity : AppCompatActivity() {
     private val binding: ActivityOtherUserBinding by lazy {
@@ -25,25 +34,29 @@ class OtherUserActivity : AppCompatActivity() {
         setContentView(binding.root)
         dbHelper = DatabaseHelper(this)
 
+        binding.btnanaylisis.isEnabled=false
+
         adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, contactsList)
         binding.listView.adapter = adapter
+
+        loadContacts()
 
         binding.btnAdd.setOnClickListener {
             val name = binding.sname.text.toString().trim()
             val mobile = binding.smob.text.toString().trim()
 
             if (name.isEmpty() || mobile.isEmpty()) {
-                Toast.makeText(this, "Please enter both name and mobile number", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please enter both name and User Id", Toast.LENGTH_SHORT).show()
             } else {
                 val isAdded = dbHelper.addContact(name, mobile)
                 if (isAdded) {
-                    Toast.makeText(this, "Contact added", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "User added", Toast.LENGTH_SHORT).show()
                     loadContacts()
                     hideKeyboard()
                     binding.smob.setText("")
                     binding.sname.setText("")
                 } else {
-                    Toast.makeText(this, "Mobile number already exists", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "User id already exists", Toast.LENGTH_SHORT).show()
                 }
 
             }
@@ -67,15 +80,95 @@ class OtherUserActivity : AppCompatActivity() {
             true
         }
 
-        binding.listView.setOnItemClickListener { _, _, position, _ ->
+            binding.listView.setOnItemClickListener { _, _, position, _ ->
 
-            //Toast.makeText(this, "Clicked: $name", Toast.LENGTH_SHORT).show()
-        }
+                val selectedContact = contactsList[position]
+                val parts = selectedContact.split(" - ")
+                val name = parts[0]
+                val mobile = parts[1]
+                val database = FirebaseDatabase.getInstance().getReference("Users").child(mobile)
+                val hDatabase=  FirebaseDatabase.getInstance().getReference("HealthData").child(mobile).child(dateName())
+                database.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                           val userData = snapshot.getValue(UserModel::class.java)
+                            if(userData!=null){
+                                binding.apply {
+                                    suname.visibility=View.VISIBLE
+                                     sumob.visibility=View.VISIBLE
+                                    suname.setText("Name : "+userData.userName.toString())
+                                    sumob.setText("Mob. No. : "+userData.phoneNo.toString())
+                                }
+                                hDatabase.addListenerForSingleValueEvent(object :ValueEventListener{
+                                    override fun onDataChange(snapshot: DataSnapshot) {
+                                        if(snapshot.exists()){
+                                            val helthData = snapshot.getValue(HealthData::class.java)
+                                            if(helthData!=null){
+                                                binding.apply {
+                                                    usertemp.setText(helthData.temperature.toString()+ " °C")
+                                                    userheart.setText(helthData.heartRate.toString() + " bpm")
+                                                    userspo2.setText(helthData.spO2.toString()+ " %")
+                                                    stemp.visibility= View.VISIBLE
+                                                    sheart.visibility=View.VISIBLE
+                                                    savespo2.visibility=View.VISIBLE
+                                                    usertemp.visibility=View.VISIBLE
+                                                    userheart.visibility=View.VISIBLE
+                                                    userspo2.visibility=View.VISIBLE
+                                                    btnanaylisis.isEnabled=true
+
+                                                }
+                                            }else{
+                                               // Toast.makeText(this@OtherUserActivity, "Currently No Data Avaiable", Toast.LENGTH_SHORT).show()
+                                            }
+
+                                        }else{
+                                            Toast.makeText(this@OtherUserActivity, "Currently No Data Avaiable ", Toast.LENGTH_SHORT).show()
+                                        }
+                                    }
+
+                                    override fun onCancelled(error: DatabaseError) {
+                                        Toast.makeText(this@OtherUserActivity, "Database error: ${error.message}", Toast.LENGTH_SHORT).show()
+                                    }
+
+                                })
+                            }else{
+                                Toast.makeText(this@OtherUserActivity, "No Data found", Toast.LENGTH_SHORT).show()
+                            }
+                        } else {
+                            Toast.makeText(this@OtherUserActivity, "No matching user found", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        Toast.makeText(this@OtherUserActivity, "Database error: ${error.message}", Toast.LENGTH_SHORT).show()
+                    }
+                })
+                binding.btnanaylisis.setOnClickListener {
+                    val intent = Intent(this@OtherUserActivity,AnalysisActivity::class.java)
+                    intent.putExtra("userId",mobile)
+                    startActivity(intent)
+                }
+            }
         binding.imgBack.setOnClickListener {
             finish()
         }
-        loadContacts()
-
+        binding.btnClear.setOnClickListener {
+            binding.apply {
+                usertemp.setText("")
+                userheart.setText("")
+                userspo2.setText("")
+                suname.setText("")
+                sumob.setText("")
+                userheart.visibility=View.INVISIBLE
+                usertemp.visibility=View.INVISIBLE
+                userspo2.visibility=View.INVISIBLE
+                suname.visibility=View.INVISIBLE
+                sumob.visibility=View.INVISIBLE
+                stemp.visibility= View.INVISIBLE
+                sheart.visibility=View.INVISIBLE
+                savespo2.visibility=View.INVISIBLE
+            }
+        }
 
     }
     private fun hideKeyboard() {
@@ -102,5 +195,10 @@ class OtherUserActivity : AppCompatActivity() {
             }
         }
         adapter.notifyDataSetChanged()
+    }
+
+    fun dateName():String{
+        val simpleDateFormat= SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
+        return simpleDateFormat.format((Date()))
     }
 }

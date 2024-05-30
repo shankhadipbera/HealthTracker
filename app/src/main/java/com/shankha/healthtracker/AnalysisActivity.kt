@@ -42,19 +42,11 @@ class AnalysisActivity : AppCompatActivity() {
             finish()
         }
 
-      /*  val intent = intent
-        val temp:Float = intent.getFloatExtra("temp", 0.0F)
-        val heartRate:Int = intent.getIntExtra("heartR",0)
-        val spO2:Int=intent.getIntExtra("spO2",0)
-        val age:Int =intent.getIntExtra("Age",0)
-        binding.textViewName.text = intent.getStringExtra("Name")
-        binding.textViewtemp.text=temp.toString()
-        binding.textViewAge.text= age.toString()
-        binding.textViewHeartR.text=heartRate.toString()
-        binding.textViewO2.text=spO2.toString()  */
+       val intent = intent
+        val userId = intent.getStringExtra("userId")
 
-            if(auth.currentUser!=null){
-                val userId= auth.currentUser!!.uid
+
+            if(userId!=null){
                  var temp:Float
                 var heartRate:Int
                  var spO2:Int
